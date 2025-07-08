@@ -16,7 +16,7 @@ app.post("/api/prompt", async (req, res) => {
   console.log("Received Prompt:", prompt);
 
   // Send prompt to Make.com webhook
-  const makeRes = await fetch("https://hook.us1.make.com/YOUR_WEBHOOK_URL", {
+  const makeRes = await fetch("https://hook.us2.make.com/3lc52acgcpcg6dvoy441sygniftcf7m2", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ prompt }),
