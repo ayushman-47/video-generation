@@ -13,7 +13,7 @@ app.get("/", (req, res) => {
 
 app.post("/api/prompt", async (req, res) => {
   const { prompt } = req.body;
-  console.log("📥 Received Prompt:", prompt);
+  console.log("Received Prompt:", prompt);
 
   // Send prompt to Make.com webhook
   const makeRes = await fetch("https://hook.us1.make.com/YOUR_WEBHOOK_URL", {
@@ -29,5 +29,5 @@ app.post("/api/prompt", async (req, res) => {
 // Use Render-assigned port
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
