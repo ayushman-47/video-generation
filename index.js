@@ -1,6 +1,6 @@
 const fetch = require('node-fetch'); // Only needed if using Node.js
 
-const WEBHOOK_URL = 'https://hook.us2.make.com/3lc52acgcpcg6dvoy441sygniftcf7m2'; // Replace with your actual Make.com webhook
+const WEBHOOK_URL = 'https://hook.us2.make.com/plfe1n1gvp9ga7nriju95n5qwxzic3qv';
 
 const data = {
   title: 'My YouTube Video',
