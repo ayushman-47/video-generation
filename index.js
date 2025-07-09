@@ -1,36 +1,28 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const fetch = require("node-fetch");
-const app = express();
+const fetch = require('node-fetch'); // Only needed if using Node.js
 
-app.use(bodyParser.json());
-app.use(express.static(__dirname));
+const WEBHOOK_URL = 'https://hook.us2.make.com/3lc52acgcpcg6dvoy441sygniftcf7m2'; // Replace with your actual Make.com webhook
 
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
-});
+const data = {
+  title: 'My YouTube Video',
+  script: 'This is the generated script from AI.',
+  voice: 'https://example.com/voice.mp3' // Replace with real URL or data
+};
 
-app.post("/api/prompt", async (req, res) => {
-  const { prompt } = req.body;
-  console.log("📥 Received prompt:", prompt); // for logging
-
+async function sendToMake() {
   try {
-    const response = await fetch("https://hook.us2.make.com/plfe1n1gvp9ga7nriju95n5qwxzic3qv", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt })
+    const response = await fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
     });
 
-    const data = await response.json();
-    console.log("✅ Webhook response:", data);
-    res.send({ videoUrl: data.videoUrl || "https://youtube.com" }); // default fallback
-  } catch (err) {
-    console.error("❌ Error sending to Make.com:", err);
-    res.status(500).send({ error: "Failed to contact Make.com" });
+    const result = await response.text(); // ✅ Correct way for Make.com plain-text response
+    console.log('Make.com response:', result); // Should log "Accepted"
+  } catch (error) {
+    console.error('Error sending to Make.com:', error.message);
   }
-});
+}
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
-});
+sendToMake();
