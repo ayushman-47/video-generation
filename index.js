@@ -15,7 +15,7 @@ app.post("/api/prompt", async (req, res) => {
   console.log("📥 Received prompt:", prompt); // for logging
 
   try {
-    const response = await fetch("https://hook.us2.make.com/3lc52acgcpcg6dvoy441sygniftcf7m2", {
+    const response = await fetch("https://hook.us2.make.com/plfe1n1gvp9ga7nriju95n5qwxzic3qv", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ prompt })
