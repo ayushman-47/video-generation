@@ -1,37 +1,33 @@
-const fetch = require('node-fetch');
+const express = require("express");
+const bodyParser = require("body-parser");
+const fetch = require("node-fetch");
+const app = express();
 
-const WEBHOOK_URL = 'https://hook.us2.make.com/plfe1n1gvp9ga7nriju95n5qwxzic3qv';
+app.use(bodyParser.json());
+app.use(express.static(__dirname));
 
-const data = {
-  title: 'My YouTube Video',
-  script: 'This is the generated script from AI.',
-  voice: 'https://example.com/voice.mp3' // Use real voice file URL if needed
-};
+// Return index.html on root
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/index.html");
+});
 
-async function sendToMake() {
-  try {
-    console.log('Sending data to Make.com...');
-    
-    const response = await fetch(WEBHOOK_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    });
+app.post("/api/prompt", async (req, res) => {
+  const { prompt } = req.body;
+  console.log("📥 Received Prompt:", prompt);
 
-    const result = await response.text(); // Make.com returns plain text
-    console.log('✅ Make.com response:', result);
-    
-    // Prevent early exit in Replit
-    setTimeout(() => {
-      console.log('✅ Script completed. You can close the terminal.');
-      process.exit(0);
-    }, 1000);
+  // Send prompt to Make.com webhook
+  const makeRes = await fetch("https://hook.us1.make.com/YOUR_WEBHOOK_URL", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ prompt }),
+  });
 
-  } catch (error) {
-    console.error('❌ Error sending to Make.com:', error.message);
-  }
-}
+  const data = await makeRes.json();
+  res.send({ videoUrl: data.videoUrl });
+});
 
-sendToMake();
+// Use Render-assigned port
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`✅ Server running on port ${PORT}`);
+});
